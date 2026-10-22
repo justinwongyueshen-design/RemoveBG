@@ -1,0 +1,28 @@
+# RemoveBG - root Apache rules (Apache 2.4+)
+Options -Indexes
+
+# Never serve documentation, example configs or dotfiles
+<FilesMatch "(^\.|\.(md|example\.php|log|ini)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# PHP limits - only applied when PHP runs as an Apache module (typical XAMPP).
+# On PHP-FPM/CGI hosting (most cPanel) these are ignored; use .user.ini instead.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 12M
+    php_value post_max_size 14M
+    php_value max_execution_time 120
+    php_flag display_errors off
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 12M
+    php_value post_max_size 14M
+    php_value max_execution_time 120
+    php_flag display_errors off
+</IfModule>
